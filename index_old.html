@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inês & Tiago · 12 Setembro 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f7f1e8;
+      --stone-100: #f5f0e8;
+      --stone-200: #e8e0d2;
+      --stone-300: #d4c9b8;
+      --stone-400: #b8a898;
+      --stone-500: #8c7c6c;
+      --stone-600: #6b5d50;
+      --stone-700: #4a3f35;
+      --stone-800: #2e2520;
+      --stone-900: #1a1410;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--stone-800);
+      overflow-x: hidden;
+    }
+
+    /* ─── BOARDING PASS SCREEN ─── */
+    #boarding-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #1a1410;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+
+    #boarding-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .boarding-wrap {
+      display: flex;
+      align-items: stretch;
+      filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6));
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticket-main {
+      background: var(--cream);
+      width: 420px;
+      padding: 2.5rem 2.5rem 2rem;
+      position: relative;
+      border-radius: 1.25rem 0 0 1.25rem;
+    }
+
+    .ticket-main::after {
+      content: '';
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      background: #1a1410;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .ticket-stub {
+      background: #f0e4cc;
+      width: 140px;
+      padding: 2.5rem 1.5rem 2rem;
+      border-radius: 0 1.25rem 1.25rem 0;
+      border-left: 2px dashed var(--stone-300);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .ticket-stub::before {
+      content: '';
+      position: absolute;
+      left: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      background: #1a1410;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    .ticket-airline {
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-bottom: 1.5rem;
+    }
+
+    .ticket-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--stone-900);
+      margin-bottom: 0.3rem;
+    }
+
+    .ticket-names .amp {
+      color: var(--stone-400);
+      font-style: italic;
+      margin: 0 0.15em;
+    }
+
+    .ticket-subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-bottom: 2rem;
+    }
+
+    .ticket-route {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .ticket-city { text-align: center; }
+
+    .ticket-city-code {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--stone-900);
+      line-height: 1;
+    }
+
+    .ticket-city-name {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-top: 0.25rem;
+    }
+
+    .ticket-route-line {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .route-plane { font-size: 1.4rem; color: var(--stone-700); }
+
+    .route-line {
+      width: 100%;
+      height: 1px;
+      background: var(--stone-300);
+      position: relative;
+    }
+
+    .route-line::before,
+    .route-line::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--stone-400);
+    }
+    .route-line::before { left: 0; }
+    .route-line::after  { right: 0; }
+
+    .ticket-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed var(--stone-300);
+    }
+
+    .ticket-field label {
+      display: block;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-bottom: 0.3rem;
+    }
+
+    .ticket-field span {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--stone-800);
+    }
+
+    .board-btn-wrap { margin-top: 2rem; text-align: center; }
+
+    .board-btn {
+      background: var(--stone-900);
+      color: white;
+      border: none;
+      padding: 0.85rem 2.5rem;
+      border-radius: 999px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .board-btn:hover { transform: translateY(-2px); }
+
+    .board-btn-icon {
+      font-size: 1rem;
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .board-btn:hover .board-btn-icon { transform: translateX(4px); }
+
+    /* STUB */
+    .stub-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-bottom: 0.3rem;
+    }
+
+    .stub-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--stone-800);
+      margin-bottom: 1.25rem;
+    }
+
+    .stub-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--stone-900);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .stub-barcode {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .barcode-lines {
+      display: flex;
+      gap: 2px;
+      align-items: flex-end;
+      height: 60px;
+    }
+
+    .barcode-lines span {
+      display: block;
+      background: var(--stone-700);
+      width: 2px;
+    }
+
+    /* ─── PLANE OVERLAY ─── */
+    #plane-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      pointer-events: none;
+      display: none;
+    }
+
+    #plane-overlay.active { display: block; }
+
+    #flying-plane {
+      position: absolute;
+      font-size: 12rem;
+      left: -220px;
+      top: 90%;
+      filter: drop-shadow(0 12px 32px rgba(0,0,0,0.2));
+    }
+
+    @keyframes flyAcross {
+      0%   { left: -220px; top: 90%; opacity: 1; transform: rotate(-10deg); }
+      75%  { opacity: 1; }
+      100% { left: calc(100vw + 220px); top: -10%; opacity: 0; transform: rotate(-10deg); }
+    }
+
+    #flying-plane.flying {
+      animation: flyAcross 3.5s cubic-bezier(0.2, 0.05, 0.4, 1) forwards;
+    }
+
+    /* ─── MAIN SITE ─── */
+    #main-site {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #main-site.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 241, 232, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--stone-200);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--stone-600);
+      text-decoration: none;
+    }
+
+    nav { display: flex; gap: 2rem; }
+    nav a {
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--stone-600);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--stone-900); }
+
+    .btn-rsvp {
+      background: var(--stone-900);
+      color: white;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .btn-rsvp:hover { transform: translateY(-1px); }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--stone-300);
+      border-radius: 999px;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--stone-700);
+    }
+
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem 2rem 1.5rem;
+      border-top: 1px solid var(--stone-200);
+    }
+    .mobile-nav a {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone-700);
+      text-decoration: none;
+    }
+    .mobile-nav.open { display: flex; }
+
+    /* ─── HERO ─── */
+    #top {
+      min-height: 94vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--stone-300);
+      background: rgba(255,255,255,0.7);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--stone-500);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 0.95;
+      color: var(--stone-900);
+    }
+
+    h1 .amp { color: var(--stone-400); font-style: italic; margin: 0 0.2em; }
+
+    .hero-text {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--stone-600);
+      max-width: 480px;
+    }
+
+    .hero-actions { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--stone-900);
+      color: white;
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.8);
+      color: var(--stone-800);
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--stone-300);
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-secondary:hover { background: white; }
+
+    .hero-cards { margin-top: 3rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+
+    .info-card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--stone-200);
+      border-radius: 1.5rem;
+      padding: 1.1rem;
+    }
+
+    .info-card-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 0.5rem; }
+    .info-card-value { font-size: 0.9rem; font-weight: 500; color: var(--stone-900); }
+
+    .hero-right { position: relative; }
+
+    .hero-card-main {
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 2rem;
+      padding: 1.25rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    .hero-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      border-radius: 1.5rem;
+      background: linear-gradient(rgba(56,44,33,0.18),rgba(56,44,33,0.18)),
+        url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80') center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.3));
+      border-radius: 1.5rem;
+    }
+
+    .save-date-badge {
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(4px);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .hero-img-bottom { position: relative; z-index: 1; }
+    .hero-img-location { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.8; margin-bottom: 0.5rem; }
+    .hero-img-date { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 400; }
+
+    .countdown-card {
+      margin-top: 1rem;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--stone-200);
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+    }
+
+    .countdown-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 1rem; }
+    .countdown-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+
+    .countdown-item {
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 1.25rem;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .countdown-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; color: var(--stone-900); }
+    .countdown-unit { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone-500); margin-top: 0.2rem; }
+
+    /* ─── SECTIONS ─── */
+    .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
+
+    .overline { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 1rem; }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--stone-900);
+      line-height: 1.1;
+    }
+
+    .section-text { margin-top: 1rem; font-size: 1rem; line-height: 1.8; color: var(--stone-600); max-width: 640px; }
+
+    .story-grid { margin-top: 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+    .story-card {
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: transform 0.25s;
+    }
+    .story-card:hover { transform: translateY(-4px); }
+
+    .story-step { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 1rem; }
+    .story-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; color: var(--stone-900); margin-bottom: 1rem; }
+    .story-card p  { font-size: 0.95rem; line-height: 1.8; color: var(--stone-600); }
+
+    .detalhes-bg { background: rgba(255,255,255,0.8); border-top: 1px solid var(--stone-200); border-bottom: 1px solid var(--stone-200); }
+    .detalhes-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; }
+
+    .card-box {
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .card-box h2 { margin-top: 1rem; }
+
+    .detail-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 2rem; }
+    .detail-mini { background: var(--stone-100); border-radius: 1.25rem; padding: 1.1rem; }
+    .detail-mini-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 0.5rem; }
+    .detail-mini-value { font-size: 1rem; font-weight: 600; color: var(--stone-900); }
+    .detail-mini-sub { font-size: 0.8rem; color: var(--stone-600); margin-top: 0.25rem; }
+
+    .map-block { margin-top: 1.25rem; background: linear-gradient(135deg, #eee5d7 0%, #d8cdbf 100%); border-radius: 1.75rem; padding: 2rem; color: var(--stone-700); }
+    .map-block-label { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .map-block p { font-size: 0.9rem; line-height: 1.8; }
+
+    .timeline-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: white;
+      border: 1px solid var(--stone-200);
+      border-radius: 1.5rem;
+      padding: 1.1rem 1.25rem;
+    }
+
+    .timeline-info h4 { font-size: 1rem; font-weight: 600; color: var(--stone-900); }
+    .timeline-info p  { font-size: 0.85rem; color: var(--stone-600); margin-top: 0.2rem; }
+
+    .timeline-time {
+      background: var(--stone-100);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--stone-700);
+      white-space: nowrap;
+    }
+
+    .gallery-grid { margin-top: 3rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .gallery-item { overflow: hidden; border-radius: 1.75rem; border: 1px solid var(--stone-200); background: white; }
+    .gallery-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; transition: transform 0.5s; }
+    .gallery-item:hover .gallery-img { transform: scale(1.05); }
+
+    .extras-bg { background: rgba(255,255,255,0.8); border-top: 1px solid var(--stone-200); border-bottom: 1px solid var(--stone-200); }
+    .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+    .quote-block { margin-top: 2rem; background: var(--stone-100); border-radius: 1.75rem; padding: 1.5rem; font-size: 0.9rem; line-height: 1.8; color: var(--stone-600); font-style: italic; }
+    .extras-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .extras-item { background: var(--stone-100); border-radius: 1.25rem; padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--stone-700); }
+
+    .faq-list { margin-top: 3rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .faq-item { background: white; border: 1px solid var(--stone-200); border-radius: 1.75rem; overflow: hidden; }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.4rem 1.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--stone-900);
+    }
+
+    .faq-arrow { font-size: 1rem; color: var(--stone-500); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-answer { display: none; padding: 0 1.75rem 1.4rem; font-size: 0.9rem; line-height: 1.8; color: var(--stone-600); }
+    .faq-item.open .faq-answer { display: block; }
+
+    #rsvp { background: var(--stone-900); color: white; border-top: 1px solid var(--stone-200); }
+
+    .rsvp-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .rsvp-left .overline { color: var(--stone-400); }
+    .rsvp-left h2 { color: white; }
+    .rsvp-left .section-text { color: var(--stone-400); }
+
+    .contact-grid { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .contact-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; padding: 1.1rem; }
+    .contact-card-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 0.5rem; }
+    .contact-card-value { font-size: 0.9rem; font-weight: 500; color: white; }
+
+    .rsvp-form-box {
+      background: white;
+      border: 1px solid var(--stone-700);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      color: var(--stone-900);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.82rem; font-weight: 500; color: var(--stone-800); }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1px solid var(--stone-300);
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--stone-900);
+      outline: none;
+      transition: border-color 0.2s;
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--stone-900); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-submit {
+      background: var(--stone-900);
+      color: white;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 999px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover { transform: translateY(-2px); }
+
+    .form-success { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 400px; background: var(--stone-100); border-radius: 1.5rem; padding: 2rem; }
+    .form-success.show { display: flex; }
+    .form-success-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .form-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 500; margin-bottom: 0.75rem; }
+    .form-success p { font-size: 0.9rem; line-height: 1.8; color: var(--stone-600); max-width: 340px; }
+
+    .btn-reset {
+      margin-top: 1.5rem;
+      background: none;
+      border: 1px solid var(--stone-300);
+      border-radius: 999px;
+      padding: 0.7rem 1.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--stone-900);
+      transition: background 0.2s;
+    }
+    .btn-reset:hover { background: white; }
+
+    footer { background: #0f0c0a; color: var(--stone-500); text-align: center; padding: 2rem; font-size: 0.82rem; letter-spacing: 0.05em; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .boarding-wrap { flex-direction: column; }
+      .ticket-main { width: 88vw; max-width: 400px; border-radius: 1.25rem 1.25rem 0 0; }
+      .ticket-stub { width: 88vw; max-width: 400px; border-radius: 0 0 1.25rem 1.25rem; border-left: none; border-top: 2px dashed var(--stone-300); }
+      .ticket-main::after, .ticket-stub::before { display: none; }
+      #top { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { display: none; }
+      .hero-cards { grid-template-columns: repeat(2, 1fr); }
+      .story-grid, .detalhes-grid, .extras-grid, .rsvp-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      nav, .btn-rsvp { display: none; }
+      .menu-toggle { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" src="musica.mp3" loop></audio>
+
+  <!-- ══════════════════════════════════
+       BOARDING PASS
+  ══════════════════════════════════ -->
+  <div id="boarding-screen">
+    <div class="boarding-wrap">
+
+      <div class="ticket-main">
+        <div class="ticket-airline">✈ &nbsp; Wedding Airlines &nbsp; · &nbsp; Vol IT·26</div>
+
+        <div class="ticket-names">Inês <span class="amp">&</span> Tiago</div>
+        <div class="ticket-subtitle">Passageiros de honra</div>
+
+        <div class="ticket-route">
+          <div class="ticket-city">
+            <div class="ticket-city-code">LIS</div>
+            <div class="ticket-city-name">Lisboa</div>
+          </div>
+          <div class="ticket-route-line">
+            <div class="route-plane">✈</div>
+            <div class="route-line"></div>
+          </div>
+          <div class="ticket-city">
+            <div class="ticket-city-code">CBR</div>
+            <div class="ticket-city-name">Coimbra</div>
+          </div>
+        </div>
+
+        <div class="ticket-details">
+          <div class="ticket-field"><label>Data</label><span>12 SET 2026</span></div>
+          <div class="ticket-field"><label>Hora</label><span>15:00</span></div>
+          <div class="ticket-field"><label>Gate</label><span>A — 12</span></div>
+          <div class="ticket-field"><label>Classe</label><span>Amor</span></div>
+          <div class="ticket-field"><label>Lugar</label><span>♥ VIP</span></div>
+          <div class="ticket-field"><label>Voo</label><span>IT 2609</span></div>
+        </div>
+
+        <div class="board-btn-wrap">
+          <button class="board-btn" onclick="boardNow()">
+            Embarcar
+            <span class="board-btn-icon">✈</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ticket-stub">
+        <div>
+          <div class="stub-label">Passageiro</div>
+          <div class="stub-value">Convidado</div>
+          <div class="stub-label">Destino</div>
+          <div class="stub-value">Coimbra</div>
+          <div class="stub-date">12 · 09<br>2026</div>
+          <div class="stub-label">Lugar</div>
+          <div class="stub-value">♥ VIP</div>
+        </div>
+        <div class="stub-barcode">
+          <div class="barcode-lines" id="barcode"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PLANE OVERLAY
+  ══════════════════════════════════ -->
+  <div id="plane-overlay">
+    <div id="flying-plane">✈</div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       MAIN SITE
+  ══════════════════════════════════ -->
+  <div id="main-site">
+
+    <header>
+      <div class="header-inner">
+        <a href="#top" class="logo">I & T</a>
+        <nav>
+          <a href="#historia">História</a>
+          <a href="#detalhes">Detalhes</a>
+          <a href="#programa">Programa</a>
+          <a href="#galeria">Galeria</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#rsvp" class="btn-rsvp">RSVP</a>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      </div>
+      <div class="mobile-nav" id="mobileNav">
+        <a href="#historia" onclick="toggleMenu()">História</a>
+        <a href="#detalhes" onclick="toggleMenu()">Detalhes</a>
+        <a href="#programa" onclick="toggleMenu()">Programa</a>
+        <a href="#galeria" onclick="toggleMenu()">Galeria</a>
+        <a href="#faq" onclick="toggleMenu()">FAQ</a>
+        <a href="#rsvp" onclick="toggleMenu()">RSVP</a>
+      </div>
+    </header>
+
+    <section id="top">
+      <div class="hero-left">
+        <div class="hero-badge">✈ Uma viagem para a vida inteira</div>
+        <h1>Inês <span class="amp">&</span> Tiago</h1>
+        <p class="hero-text">Um casamento inspirado numa linguagem editorial premium — elegante, emocional e contemporâneo. Com espaço para a vossa história, os detalhes do dia e uma confirmação simples.</p>
+        <div class="hero-actions">
+          <a href="#rsvp" class="btn-primary">Confirmar presença</a>
+          <a href="#historia" class="btn-secondary">Explorar o site</a>
+        </div>
+        <div class="hero-cards">
+          <div class="info-card"><div class="info-card-label">📅 Data</div><div class="info-card-value">12 Setembro 2026</div></div>
+          <div class="info-card"><div class="info-card-label">📍 Local</div><div class="info-card-value">Coimbra</div></div>
+          <div class="info-card"><div class="info-card-label">♥ Tema</div><div class="info-card-value">Viagens</div></div>
+          <div class="info-card"><div class="info-card-label">✨ Estilo</div><div class="info-card-value">Editorial</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-card-main">
+          <div class="hero-img">
+            <div class="save-date-badge">Save the date</div>
+            <div class="hero-img-bottom">
+              <div class="hero-img-location">Coimbra, Portugal</div>
+              <div class="hero-img-date">12 · 09 · 26</div>
+            </div>
+          </div>
+        </div>
+        <div class="countdown-card">
+          <div class="countdown-label">Countdown</div>
+          <div class="countdown-grid">
+            <div class="countdown-item"><div class="countdown-num" id="cd-days">—</div><div class="countdown-unit">Dias</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-hours">—</div><div class="countdown-unit">Horas</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-mins">—</div><div class="countdown-unit">Min</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia">
+      <div class="section-inner">
+        <p class="overline">A nossa história</p>
+        <h2>Dois percursos.<br>Um só destino.</h2>
+        <p class="section-text">Aqui entra a vossa história — desde o primeiro encontro até ao momento em que dois caminhos se tornaram um.</p>
+        <div class="story-grid">
+          <div class="story-card"><div class="story-step">01</div><h3>Partida</h3><p>O início de tudo. O primeiro encontro, a primeira conversa, o instante em que algo começou a fazer sentido.</p></div>
+          <div class="story-card"><div class="story-step">02</div><h3>Rota</h3><p>As viagens, as memórias, os dias difíceis e os dias luminosos. Tudo aquilo que transformou dois caminhos num só.</p></div>
+          <div class="story-card"><div class="story-step">03</div><h3>Destino</h3><p>Este casamento não é apenas um evento. É a continuação da aventura mais bonita das nossas vidas.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detalhes" class="detalhes-bg">
+      <div class="section-inner">
+        <div class="detalhes-grid">
+          <div class="card-box">
+            <p class="overline">Detalhes do dia</p>
+            <h2>Tudo o que precisam de saber</h2>
+            <div class="detail-mini-grid">
+              <div class="detail-mini"><div class="detail-mini-label">📍 Cerimónia</div><div class="detail-mini-value">Quinta do Encontro</div><div class="detail-mini-sub">Coimbra, Portugal</div></div>
+              <div class="detail-mini"><div class="detail-mini-label">🕒 Hora</div><div class="detail-mini-value">15:00</div><div class="detail-mini-sub">Pedimos chegada com antecedência.</div></div>
+            </div>
+            <div class="map-block">
+              <div class="map-block-label">🗺 Mapa & Direções</div>
+              <p>Substituir este bloco por um mapa real do Google Maps, botão de navegação e indicações para estacionamento.</p>
+            </div>
+          </div>
+          <div id="programa" class="card-box" style="background:#f5eee5;">
+            <p class="overline">Programa</p>
+            <h2>A viagem do dia</h2>
+            <div class="timeline-list">
+              <div class="timeline-item"><div class="timeline-info"><h4>Chegada dos convidados</h4><p>Quinta do Encontro</p></div><div class="timeline-time">14:30</div></div>
+              <div class="timeline-item"><div class="timeline-info"><h4>Cerimónia</h4><p>Jardins principais</p></div><div class="timeline-time">15:00</div></div>
+              <div class="timeline-item"><div class="timeline-info"><h4>Cocktail</h4><p>Pátio exterior</p></div><div class="timeline-time">17:00</div></div>
+              <div class="timeline-item"><div class="timeline-info"><h4>Jantar</h4><p>Sala principal</p></div><div class="timeline-time">19:30</div></div>
+              <div class="timeline-item"><div class="timeline-info"><h4>Primeira dança</h4><p>Salão</p></div><div class="timeline-time">22:30</div></div>
+              <div class="timeline-item"><div class="timeline-info"><h4>Festa</h4><p>Pista</p></div><div class="timeline-time">23:00</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="galeria">
+      <div class="section-inner">
+        <p class="overline">Galeria</p>
+        <h2>Memórias em imagem</h2>
+        <p class="section-text">Imagens de demonstração. Substituir por fotografias vossas.</p>
+        <div class="gallery-grid">
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1516589091380-5d601e0062c2?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="extras-bg">
+      <div class="section-inner">
+        <div class="extras-grid">
+          <div class="card-box">
+            <p class="overline">🎁 Presentes</p>
+            <h2>Lista ou contribuição</h2>
+            <p class="section-text">Esta secção pode servir para colocar uma lista de casamento, IBAN, link para lua de mel ou uma mensagem sobre presentes.</p>
+            <div class="quote-block">"O mais importante é a vossa presença, mas se quiserem oferecer-nos algo, poderão contribuir para a nossa próxima viagem."</div>
+          </div>
+          <div class="card-box">
+            <p class="overline">🎉 Extras</p>
+            <h2>Mais secções possíveis</h2>
+            <div class="extras-list">
+              <div class="extras-item">Lista de hotéis próximos</div>
+              <div class="extras-item">Confirmação por grupos/famílias</div>
+              <div class="extras-item">Playlist colaborativa</div>
+              <div class="extras-item">Mensagem para os convidados</div>
+              <div class="extras-item">Transferes e estacionamento</div>
+              <div class="extras-item">Livro de mensagens digital</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="section-inner">
+        <p class="overline">FAQ</p>
+        <h2>Perguntas frequentes</h2>
+        <p class="section-text">Uma secção limpa e útil para reduzir mensagens repetidas dos convidados.</p>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">Como posso confirmar presença? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Podes confirmar através do formulário RSVP nesta página. Basta preencher os dados e enviar.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">Há dress code? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Sim. Elegante e festivo. Queremos um ambiente leve, bonito e confortável.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">Posso indicar restrições alimentares? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Sim. O formulário inclui um campo próprio para alergias, intolerâncias ou preferências alimentares.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">Existe estacionamento no local? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Sim. Haverá estacionamento e sinalização para facilitar a chegada.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rsvp">
+      <div class="rsvp-grid">
+        <div class="rsvp-left">
+          <p class="overline">RSVP</p>
+          <h2>Confirmar presença</h2>
+          <p class="section-text">Preenche o formulário para confirmares a tua presença.</p>
+          <div class="contact-grid">
+            <div class="contact-card"><div class="contact-card-label">✉ Email</div><div class="contact-card-value">casamento@exemplo.pt</div></div>
+            <div class="contact-card"><div class="contact-card-label">📞 Contacto</div><div class="contact-card-value">+351 900 000 000</div></div>
+          </div>
+        </div>
+        <div class="rsvp-form-box">
+          <div id="rsvpForm">
+            <div class="form-row">
+              <div class="form-group"><label>Nome</label><input type="text" id="nome" placeholder="O teu nome" required /></div>
+              <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="nome@email.com" required /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Vais estar presente?</label><select id="attending"><option>Sim</option><option>Não</option></select></div>
+              <div class="form-group"><label>Número de pessoas</label><select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+            </div>
+            <div class="form-group"><label>Restrições alimentares</label><input type="text" id="dietary" placeholder="Alergias, intolerâncias, opções vegetarianas..." /></div>
+            <div class="form-group"><label>Mensagem para os noivos</label><textarea id="message" placeholder="Escreve uma mensagem bonita"></textarea></div>
+            <button class="form-submit" onclick="submitForm()">Enviar confirmação</button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">♥</div>
+            <h3>Obrigado pela confirmação</h3>
+            <p>O formulário foi recebido. Em breve os noivos entrarão em contacto.</p>
+            <button class="btn-reset" onclick="resetForm()">Preencher novamente</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Inês & Tiago · 12 Setembro 2026 · Coimbra, Portugal</footer>
+
+  </div>
+
+  <script>
+    // ── MUSIC
+    const music = document.getElementById('bgMusic');
+    music.volume = 0.4;
+
+    // browsers require a user gesture — play on first click/touch anywhere
+    function startMusic() {
+      music.play().catch(() => {});
+      document.removeEventListener('click', startMusic);
+      document.removeEventListener('touchstart', startMusic);
+    }
+    document.addEventListener('click', startMusic);
+    document.addEventListener('touchstart', startMusic);
+
+    // ── BARCODE
+    (function() {
+      const bc = document.getElementById('barcode');
+      [40,28,52,35,60,22,48,30,58,25,45,38,55,20,50,32,44,26,56,36,42,24,60,30,48].forEach(h => {
+        const s = document.createElement('span');
+        s.style.height = h + 'px';
+        bc.appendChild(s);
+      });
+    })();
+
+    // ── BOARD NOW
+    function boardNow() {
+      const overlay = document.getElementById('plane-overlay');
+      const plane   = document.getElementById('flying-plane');
+      const screen  = document.getElementById('boarding-screen');
+      const site    = document.getElementById('main-site');
+
+      overlay.classList.add('active');
+      plane.offsetHeight; // force reflow so animation starts immediately
+      plane.classList.add('flying');
+
+      setTimeout(() => { screen.classList.add('fade-out'); }, 1200);
+
+      setTimeout(() => {
+        screen.style.display = 'none';
+        overlay.classList.remove('active');
+        plane.classList.remove('flying');
+        site.style.display = 'block';
+        site.offsetHeight;
+        site.classList.add('visible');
+        updateCountdown();
+      }, 3600);
+    }
+
+    // ── COUNTDOWN
+    function updateCountdown() {
+      const diff = Math.max(0, new Date('2026-09-12T15:00:00') - new Date());
+      document.getElementById('cd-days').textContent  = Math.floor(diff / 86400000);
+      document.getElementById('cd-hours').textContent = Math.floor((diff / 3600000) % 24);
+      document.getElementById('cd-mins').textContent  = Math.floor((diff / 60000) % 60);
+    }
+    setInterval(updateCountdown, 60000);
+
+    // ── MOBILE MENU
+    function toggleMenu() { document.getElementById('mobileNav').classList.toggle('open'); }
+
+    // ── FAQ
+    function toggleFaq(btn) { btn.parentElement.classList.toggle('open'); }
+
+    // ── RSVP
+    function submitForm() {
+      if (!document.getElementById('nome').value.trim() || !document.getElementById('email').value.trim()) {
+        alert('Por favor preenche o nome e email.');
+        return;
+      }
+      document.getElementById('rsvpForm').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    }
+
+    function resetForm() {
+      document.getElementById('rsvpForm').style.display = 'block';
+      document.getElementById('formSuccess').classList.remove('show');
+      ['nome','email','dietary','message'].forEach(id => document.getElementById(id).value = '');
+    }
+  </script>
+</body>
+</html>
