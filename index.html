@@ -287,7 +287,7 @@
     #plane-overlay {
       position: fixed;
       inset: 0;
-      z-index: 999;
+      z-index: 9999;
       pointer-events: none;
       display: none;
     }
@@ -775,6 +775,24 @@
     footer { background: #0f0c0a; color: var(--stone-500); text-align: center; padding: 2rem; font-size: 0.82rem; letter-spacing: 0.05em; }
 
     /* ════════════════════════════════
+       AVIÃO MOBILE — tamanho reduzido
+       e keyframes redefinidos
+    ════════════════════════════════ */
+    @media (max-width: 900px) {
+      #flying-plane {
+        font-size: 8rem;
+        left: -150px;
+        top: 90%;
+      }
+
+      @keyframes flyAcross {
+        0%   { left: -150px; top: 90%; opacity: 1; transform: rotate(-10deg); }
+        75%  { opacity: 1; }
+        100% { left: calc(100vw + 150px); top: -10%; opacity: 0; transform: rotate(-10deg); }
+      }
+    }
+
+    /* ════════════════════════════════
        RESPONSIVE — TABLET (< 900px)
     ════════════════════════════════ */
     @media (max-width: 900px) {
@@ -1180,22 +1198,48 @@
     })();
 
     // ── BOARD NOW
+    // Define tamanho e animação do avião dinamicamente consoante o ecrã
     function boardNow() {
       const overlay = document.getElementById('plane-overlay');
       const plane   = document.getElementById('flying-plane');
       const screen  = document.getElementById('boarding-screen');
       const site    = document.getElementById('main-site');
 
+      const isMobile = window.innerWidth <= 900;
+
+      // Repor posição inicial consoante o ecrã
+      if (isMobile) {
+        plane.style.fontSize = '8rem';
+        plane.style.left = '-150px';
+      } else {
+        plane.style.fontSize = '22rem';
+        plane.style.left = '-400px';
+      }
+      plane.style.top = '90%';
+      plane.style.opacity = '1';
+      plane.style.transform = 'rotate(-10deg)';
+
       overlay.classList.add('active');
-      plane.offsetHeight;
-      plane.classList.add('flying');
+
+      // Animar via JS para garantir que funciona em mobile
+      const endLeft = isMobile ? (window.innerWidth + 150) : (window.innerWidth + 400);
+      plane.style.transition = 'left 3.5s cubic-bezier(0.2, 0.05, 0.4, 1), top 3.5s cubic-bezier(0.2, 0.05, 0.4, 1), opacity 0.5s ease 2.5s';
+
+      // Trigger no próximo frame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          plane.style.left = endLeft + 'px';
+          plane.style.top = '-10%';
+          plane.style.opacity = '0';
+        });
+      });
 
       setTimeout(() => { screen.classList.add('fade-out'); }, 1200);
 
       setTimeout(() => {
         screen.style.display = 'none';
         overlay.classList.remove('active');
-        plane.classList.remove('flying');
+        plane.style.transition = '';
         site.style.display = 'block';
         site.offsetHeight;
         site.classList.add('visible');
