@@ -287,7 +287,7 @@
     #plane-overlay {
       position: fixed;
       inset: 0;
-      z-index: 999;
+      z-index: 9999;
       pointer-events: none;
       display: none;
     }
@@ -775,10 +775,27 @@
     footer { background: #0f0c0a; color: var(--stone-500); text-align: center; padding: 2rem; font-size: 0.82rem; letter-spacing: 0.05em; }
 
     /* ════════════════════════════════
+       AVIÃO MOBILE — tamanho reduzido
+       e keyframes redefinidos
+    ════════════════════════════════ */
+    @media (max-width: 900px) {
+      #flying-plane {
+        font-size: 8rem;
+        left: -150px;
+        top: 90%;
+      }
+
+      @keyframes flyAcross {
+        0%   { left: -150px; top: 90%; opacity: 1; transform: rotate(-10deg); }
+        75%  { opacity: 1; }
+        100% { left: calc(100vw + 150px); top: -10%; opacity: 0; transform: rotate(-10deg); }
+      }
+    }
+
+    /* ════════════════════════════════
        RESPONSIVE — TABLET (< 900px)
     ════════════════════════════════ */
     @media (max-width: 900px) {
-      /* Boarding pass — empilha verticalmente */
       .boarding-wrap { flex-direction: column; align-items: center; }
       .ticket-main {
         width: 92vw;
@@ -802,8 +819,6 @@
       .stub-barcode { display: none; }
       .stub-date { margin-bottom: 0; font-size: 1.1rem; }
       .stub-value { margin-bottom: 0.25rem; }
-
-      /* Layout geral */
       #top { grid-template-columns: 1fr; min-height: auto; padding: 2.5rem 1.5rem; }
       .hero-right { display: none; }
       .hero-cards { grid-template-columns: repeat(2, 1fr); }
@@ -812,15 +827,9 @@
       .extras-grid { grid-template-columns: 1fr; }
       .rsvp-grid { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-
-      /* Header */
       nav, .btn-rsvp { display: none; }
       .menu-toggle { display: block; }
-
-      /* Formulário */
       .form-row { grid-template-columns: 1fr; }
-
-      /* Secções */
       .section-inner { padding: 3rem 1.5rem; }
       .card-box { padding: 1.75rem; }
       .detail-mini-grid { grid-template-columns: 1fr; }
@@ -830,30 +839,19 @@
        RESPONSIVE — MOBILE (< 500px)
     ════════════════════════════════ */
     @media (max-width: 500px) {
-      /* Boarding pass */
       .ticket-main { width: 95vw; padding: 1.5rem 1.25rem 1.25rem; }
       .ticket-stub { width: 95vw; padding: 1rem 1.25rem; }
       .ticket-names { font-size: 1.9rem; }
       .ticket-city-code { font-size: 1.7rem; }
       .board-btn { padding: 0.8rem 1.75rem; font-size: 0.7rem; }
-
-      /* Hero */
       h1 { font-size: 3rem; }
       .hero-badge { font-size: 0.6rem; }
       .hero-cards { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
       .info-card { padding: 0.85rem; }
       .info-card-value { font-size: 0.82rem; }
-
-      /* Galeria */
       .gallery-grid { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-
-      /* Contactos RSVP */
       .contact-grid { grid-template-columns: 1fr; }
-
-      /* FAQ */
       .faq-question { padding: 1.1rem 1.25rem; font-size: 0.9rem; }
-
-      /* Secções */
       .section-inner { padding: 2.5rem 1.25rem; }
     }
   </style>
@@ -874,8 +872,8 @@
         <div class="ticket-subtitle">Passageiros de honra</div>
         <div class="ticket-route">
           <div class="ticket-city">
-            <div class="ticket-city-code">LIS</div>
-            <div class="ticket-city-name">Lisboa</div>
+            <div class="ticket-city-code">CBR</div>
+            <div class="ticket-city-name">Coimbra</div>
           </div>
           <div class="ticket-route-line">
             <div class="route-plane">✈</div>
@@ -936,9 +934,7 @@
       <div class="header-inner">
         <a href="#top" class="logo">I & T</a>
         <nav>
-          <a href="#historia">História</a>
           <a href="#detalhes">Detalhes</a>
-          <a href="#programa">Programa</a>
           <a href="#galeria">Galeria</a>
           <a href="#faq">FAQ</a>
         </nav>
@@ -946,9 +942,7 @@
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       </div>
       <div class="mobile-nav" id="mobileNav">
-        <a href="#historia" onclick="toggleMenu()">História</a>
         <a href="#detalhes" onclick="toggleMenu()">Detalhes</a>
-        <a href="#programa" onclick="toggleMenu()">Programa</a>
         <a href="#galeria" onclick="toggleMenu()">Galeria</a>
         <a href="#faq" onclick="toggleMenu()">FAQ</a>
         <a href="#rsvp" onclick="toggleMenu()">RSVP</a>
@@ -959,13 +953,13 @@
       <div class="hero-left">
         <div class="hero-badge">✈ Uma viagem para a vida inteira</div>
         <h1>Inês <span class="amp">&</span> Tiago</h1>
-        <p class="hero-text">Um casamento especial numa data muito especial — rodeados das pessoas que mais amamos, num dia que nunca vamos esquecer.</p>
+        <p class="hero-text">Estão prontos para o dia mais feliz das nossas vidas? Venham connosco e embarquem nesta aventura. Queremos muito contar convosco!</p>
         <div class="hero-actions">
           <a href="#rsvp" class="btn-primary">Confirmar presença</a>
           <a href="#historia" class="btn-secondary">Explorar o site</a>
         </div>
         <div class="hero-cards">
-          <div class="info-card"><div class="info-card-label">📅 Data</div><div class="info-card-value">26 Junho 2026</div></div>
+          <div class="info-card"><div class="info-card-label">📅 Data</div><div class="info-card-value">26 Junho 2026<br><span style="font-size:0.78rem;color:var(--stone-500);font-weight:400;">Sexta-feira</span></div></div>
           <div class="info-card"><div class="info-card-label">⛪ Igreja</div><div class="info-card-value">Lavandeira</div></div>
           <div class="info-card"><div class="info-card-label">🍽 Festa</div><div class="info-card-value">Quinta do Éden</div></div>
           <div class="info-card"><div class="info-card-label">🕐 Hora</div><div class="info-card-value">11:30</div></div>
@@ -988,19 +982,6 @@
             <div class="countdown-item"><div class="countdown-num" id="cd-hours">—</div><div class="countdown-unit">Horas</div></div>
             <div class="countdown-item"><div class="countdown-num" id="cd-mins">—</div><div class="countdown-unit">Min</div></div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="historia">
-      <div class="section-inner">
-        <p class="overline">A nossa história</p>
-        <h2>Dois percursos.<br>Um só destino.</h2>
-        <p class="section-text">Aqui entra a vossa história — desde o primeiro encontro até ao momento em que dois caminhos se tornaram um.</p>
-        <div class="story-grid">
-          <div class="story-card"><div class="story-step">01</div><h3>Partida</h3><p>O início de tudo. O primeiro encontro, a primeira conversa, o instante em que algo começou a fazer sentido.</p></div>
-          <div class="story-card"><div class="story-step">02</div><h3>Rota</h3><p>As viagens, as memórias, os dias difíceis e os dias luminosos. Tudo aquilo que transformou dois caminhos num só.</p></div>
-          <div class="story-card"><div class="story-step">03</div><h3>Destino</h3><p>Este casamento não é apenas um evento. É a continuação da aventura mais bonita das nossas vidas.</p></div>
         </div>
       </div>
     </section>
@@ -1035,18 +1016,6 @@
               </p>
             </div>
           </div>
-          <div id="programa" class="card-box" style="background:#f5eee5;">
-            <p class="overline">Programa</p>
-            <h2>A viagem do dia</h2>
-            <div class="timeline-list">
-              <div class="timeline-item"><div class="timeline-info"><h4>Copo de água</h4><p>Igreja da Lavandeira</p></div><div class="timeline-time">11:30</div></div>
-              <div class="timeline-item"><div class="timeline-info"><h4>Missa</h4><p>Igreja da Lavandeira</p></div><div class="timeline-time">12:00</div></div>
-              <div class="timeline-item"><div class="timeline-info"><h4>Cocktail</h4><p>Quinta do Éden</p></div><div class="timeline-time">—</div></div>
-              <div class="timeline-item"><div class="timeline-info"><h4>Jantar</h4><p>Quinta do Éden</p></div><div class="timeline-time">—</div></div>
-              <div class="timeline-item"><div class="timeline-info"><h4>Primeira dança</h4><p>Quinta do Éden</p></div><div class="timeline-time">—</div></div>
-              <div class="timeline-item"><div class="timeline-info"><h4>Festa</h4><p>Quinta do Éden</p></div><div class="timeline-time">—</div></div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -1071,21 +1040,20 @@
       <div class="section-inner">
         <div class="extras-grid">
           <div class="card-box">
-            <p class="overline">🎁 Presentes</p>
-            <h2>Lista ou contribuição</h2>
-            <p class="section-text">Esta secção pode servir para colocar uma lista de casamento, IBAN, link para lua de mel ou uma mensagem sobre presentes.</p>
-            <div class="quote-block">"O mais importante é a vossa presença, mas se quiserem oferecer-nos algo, poderão contribuir para a nossa próxima viagem."</div>
+            <p class="overline">🏨 Hotéis</p>
+            <h2>Onde ficar</h2>
+            <p class="section-text">Sugestões de alojamento próximo do local do casamento.</p>
+            <div class="extras-list">
+              <a href="https://www.booking.com/Share-FyEy9P" target="_blank" class="extras-item" style="text-decoration:none;color:inherit;display:block;">🏡 Quinta do Éden — ver no Booking.com</a>
+              <a href="https://www.booking.com/Share-kRNRvAU" target="_blank" class="extras-item" style="text-decoration:none;color:inherit;display:block;">🏨 Hotel Santiago Vagos — ver no Booking.com</a>
+            </div>
           </div>
           <div class="card-box">
-            <p class="overline">🎉 Extras</p>
-            <h2>Mais secções possíveis</h2>
+            <p class="overline">🎵 Playlist</p>
+            <h2>Playlist colaborativa</h2>
+            <p class="section-text">Adiciona as tuas músicas favoritas à playlist do casamento. A festa é de todos!</p>
             <div class="extras-list">
-              <div class="extras-item">Lista de hotéis próximos</div>
-              <div class="extras-item">Confirmação por grupos/famílias</div>
-              <div class="extras-item">Playlist colaborativa</div>
-              <div class="extras-item">Mensagem para os convidados</div>
-              <div class="extras-item">Transferes e estacionamento</div>
-              <div class="extras-item">Livro de mensagens digital</div>
+              <div class="extras-item">Link da playlist em breve</div>
             </div>
           </div>
         </div>
@@ -1161,13 +1129,6 @@
     // ── MUSIC
     const music = document.getElementById('bgMusic');
     music.volume = 0.4;
-    function startMusic() {
-      music.play().catch(() => {});
-      document.removeEventListener('click', startMusic);
-      document.removeEventListener('touchstart', startMusic);
-    }
-    document.addEventListener('click', startMusic);
-    document.addEventListener('touchstart', startMusic);
 
     // ── BARCODE
     (function() {
@@ -1181,21 +1142,46 @@
 
     // ── BOARD NOW
     function boardNow() {
+      // Tocar música diretamente no clique — única forma fiável no Android
+      music.play().catch(() => {});
+
       const overlay = document.getElementById('plane-overlay');
       const plane   = document.getElementById('flying-plane');
       const screen  = document.getElementById('boarding-screen');
       const site    = document.getElementById('main-site');
 
+      const isMobile = window.innerWidth <= 900;
+
+      if (isMobile) {
+        plane.style.fontSize = '8rem';
+        plane.style.left = '-150px';
+      } else {
+        plane.style.fontSize = '22rem';
+        plane.style.left = '-400px';
+      }
+      plane.style.top = '90%';
+      plane.style.opacity = '1';
+      plane.style.transform = 'rotate(-10deg)';
+
       overlay.classList.add('active');
-      plane.offsetHeight;
-      plane.classList.add('flying');
+
+      const endLeft = isMobile ? (window.innerWidth + 150) : (window.innerWidth + 400);
+      plane.style.transition = 'left 3.5s cubic-bezier(0.2, 0.05, 0.4, 1), top 3.5s cubic-bezier(0.2, 0.05, 0.4, 1), opacity 0.5s ease 2.5s';
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          plane.style.left = endLeft + 'px';
+          plane.style.top = '-10%';
+          plane.style.opacity = '0';
+        });
+      });
 
       setTimeout(() => { screen.classList.add('fade-out'); }, 1200);
 
       setTimeout(() => {
         screen.style.display = 'none';
         overlay.classList.remove('active');
-        plane.classList.remove('flying');
+        plane.style.transition = '';
         site.style.display = 'block';
         site.offsetHeight;
         site.classList.add('visible');
