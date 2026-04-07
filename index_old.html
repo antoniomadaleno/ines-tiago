@@ -985,6 +985,14 @@
             </div>
           </div>
         </div>
+        <div class="countdown-card" style="margin-top:1rem;">
+          <div class="countdown-label">Countdown</div>
+          <div class="countdown-grid">
+            <div class="countdown-item"><div class="countdown-num" id="cd-days-m">—</div><div class="countdown-unit">Dias</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-hours-m">—</div><div class="countdown-unit">Horas</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-mins-m">—</div><div class="countdown-unit">Min</div></div>
+          </div>
+        </div>
       </div>
       <div class="hero-right">
         <div class="hero-card-main">
@@ -1045,14 +1053,13 @@
       <div class="section-inner">
         <p class="overline">Galeria</p>
         <h2>Memórias em imagem</h2>
-        <p class="section-text">Imagens de demonstração. Substituir por fotografias vossas.</p>
         <div class="gallery-grid">
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="" /></div>
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="" /></div>
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80" alt="" /></div>
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1516589091380-5d601e0062c2?auto=format&fit=crop&w=800&q=80" alt="" /></div>
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80" alt="" /></div>
-          <div class="gallery-item"><img class="gallery-img" src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img1.jpeg" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img2.jpeg" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img3.jpeg" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img4.jpeg" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img5.jpeg" alt="" /></div>
+          <div class="gallery-item"><img class="gallery-img" src="images/img6.jpeg" alt="" /></div>
         </div>
       </div>
     </section>
@@ -1207,9 +1214,18 @@
     // ── COUNTDOWN
     function updateCountdown() {
       const diff = Math.max(0, new Date('2026-06-26T11:30:00') - new Date());
-      document.getElementById('cd-days').textContent  = Math.floor(diff / 86400000);
-      document.getElementById('cd-hours').textContent = Math.floor((diff / 3600000) % 24);
-      document.getElementById('cd-mins').textContent  = Math.floor((diff / 60000) % 60);
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff / 3600000) % 24);
+      const mins  = Math.floor((diff / 60000) % 60);
+      document.getElementById('cd-days').textContent  = days;
+      document.getElementById('cd-hours').textContent = hours;
+      document.getElementById('cd-mins').textContent  = mins;
+      const dm = document.getElementById('cd-days-m');
+      const hm = document.getElementById('cd-hours-m');
+      const mm = document.getElementById('cd-mins-m');
+      if (dm) dm.textContent = days;
+      if (hm) hm.textContent = hours;
+      if (mm) mm.textContent = mins;
     }
     setInterval(updateCountdown, 60000);
 
