@@ -985,6 +985,14 @@
             </div>
           </div>
         </div>
+        <div class="countdown-card" style="margin-top:1rem;">
+          <div class="countdown-label">Countdown</div>
+          <div class="countdown-grid">
+            <div class="countdown-item"><div class="countdown-num" id="cd-days-m">—</div><div class="countdown-unit">Dias</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-hours-m">—</div><div class="countdown-unit">Horas</div></div>
+            <div class="countdown-item"><div class="countdown-num" id="cd-mins-m">—</div><div class="countdown-unit">Min</div></div>
+          </div>
+        </div>
       </div>
       <div class="hero-right">
         <div class="hero-card-main">
@@ -1207,9 +1215,18 @@
     // ── COUNTDOWN
     function updateCountdown() {
       const diff = Math.max(0, new Date('2026-06-26T11:30:00') - new Date());
-      document.getElementById('cd-days').textContent  = Math.floor(diff / 86400000);
-      document.getElementById('cd-hours').textContent = Math.floor((diff / 3600000) % 24);
-      document.getElementById('cd-mins').textContent  = Math.floor((diff / 60000) % 60);
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff / 3600000) % 24);
+      const mins  = Math.floor((diff / 60000) % 60);
+      document.getElementById('cd-days').textContent  = days;
+      document.getElementById('cd-hours').textContent = hours;
+      document.getElementById('cd-mins').textContent  = mins;
+      const dm = document.getElementById('cd-days-m');
+      const hm = document.getElementById('cd-hours-m');
+      const mm = document.getElementById('cd-mins-m');
+      if (dm) dm.textContent = days;
+      if (hm) hm.textContent = hours;
+      if (mm) mm.textContent = mins;
     }
     setInterval(updateCountdown, 60000);
 
