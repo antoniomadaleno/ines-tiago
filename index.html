@@ -491,7 +491,18 @@
     .info-card-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone-500); margin-bottom: 0.5rem; }
     .info-card-value { font-size: 0.9rem; font-weight: 500; color: var(--stone-900); }
 
-    .hero-right { position: relative; }
+    .hero-img-mobile {
+      display: none;
+      margin-top: 2rem;
+      border-radius: 2rem;
+      overflow: hidden;
+      border: 1px solid var(--stone-200);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    .hero-img-mobile .hero-img {
+      aspect-ratio: 3/2;
+    }
 
     .hero-card-main {
       background: white;
@@ -822,6 +833,7 @@
       #top { grid-template-columns: 1fr; min-height: auto; padding: 2.5rem 1.5rem; }
       .hero-right { display: none; }
       .hero-cards { grid-template-columns: repeat(2, 1fr); }
+      .hero-img-mobile { display: block; }
       .story-grid { grid-template-columns: 1fr; }
       .detalhes-grid { grid-template-columns: 1fr; }
       .extras-grid { grid-template-columns: 1fr; }
@@ -963,6 +975,15 @@
           <div class="info-card"><div class="info-card-label">⛪ Igreja</div><div class="info-card-value">Lavandeira</div></div>
           <div class="info-card"><div class="info-card-label">🍽 Festa</div><div class="info-card-value">Quinta do Éden</div></div>
           <div class="info-card"><div class="info-card-label">🕐 Hora</div><div class="info-card-value">11:30</div></div>
+        </div>
+        <div class="hero-img-mobile">
+          <div class="hero-img">
+            <div class="save-date-badge">Save the date</div>
+            <div class="hero-img-bottom">
+              <div class="hero-img-location">Lavandeira, Portugal</div>
+              <div class="hero-img-date">26 · 06 · 26</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="hero-right">
