@@ -996,12 +996,12 @@
               <div class="detail-mini">
                 <div class="detail-mini-label">⛪ Cerimónia</div>
                 <div class="detail-mini-value">Igreja da Lavandeira</div>
-                <div class="detail-mini-sub">Copo de água às 11:30 · Missa às 12:00</div>
+                <div class="detail-mini-sub">Receção com comes e bebes</div>
               </div>
               <div class="detail-mini">
                 <div class="detail-mini-label">🍽 Comes e Bebes</div>
                 <div class="detail-mini-value">Quinta do Éden</div>
-                <div class="detail-mini-sub">Jantar e festa</div>
+                <div class="detail-mini-sub">Copo de água</div>
               </div>
             </div>
             <div class="map-block">
@@ -1053,7 +1053,7 @@
             <h2>Playlist colaborativa</h2>
             <p class="section-text">Adiciona as tuas músicas favoritas à playlist do casamento. A festa é de todos!</p>
             <div class="extras-list">
-              <div class="extras-item">Link da playlist em breve</div>
+              <a href="https://open.spotify.com/playlist/6B4aUTURmlZRpk7W2lyyV4?si=1FzgKWWMT6CPyaA4OuBPoA&pt=c3012ee6f803cc70dcb4d909945f56b4&pi=1ifBxDAITuWF6" target="_blank" class="extras-item" style="text-decoration:none;color:inherit;display:block;">🎧 Abrir playlist no Spotify</a>
             </div>
           </div>
         </div>
@@ -1067,16 +1067,12 @@
         <p class="section-text">Uma secção limpa e útil para reduzir mensagens repetidas dos convidados.</p>
         <div class="faq-list">
           <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">Como posso confirmar presença? <span class="faq-arrow">▾</span></button>
-            <div class="faq-answer">Podes confirmar através do formulário RSVP nesta página. Basta preencher os dados e enviar.</div>
+            <button class="faq-question" onclick="toggleFaq(this)">Até quando devemos confirmar a nossa presença? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Podem confirmar a vossa presença até dia 26 de abril. Não se esqueçam de referir os nomes de quem vai.</div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">Há dress code? <span class="faq-arrow">▾</span></button>
-            <div class="faq-answer">Sim. Elegante e festivo. Queremos um ambiente leve, bonito e confortável.</div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" onclick="toggleFaq(this)">Posso indicar restrições alimentares? <span class="faq-arrow">▾</span></button>
-            <div class="faq-answer">Sim. O formulário inclui um campo próprio para alergias, intolerâncias ou preferências alimentares.</div>
+            <button class="faq-question" onclick="toggleFaq(this)">Como indicamos as nossas restrições alimentares? <span class="faq-arrow">▾</span></button>
+            <div class="faq-answer">Isso é muito importante! Deverás indicar aquando do preenchimento da confirmação.</div>
           </div>
           <div class="faq-item">
             <button class="faq-question" onclick="toggleFaq(this)">Existe estacionamento no local? <span class="faq-arrow">▾</span></button>
@@ -1093,21 +1089,19 @@
           <h2>Confirmar presença</h2>
           <p class="section-text">Preenche o formulário para confirmares a tua presença no nosso dia especial.</p>
           <div class="contact-grid">
-            <div class="contact-card"><div class="contact-card-label">✉ Email</div><div class="contact-card-value">casamento@exemplo.pt</div></div>
-            <div class="contact-card"><div class="contact-card-label">📞 Contacto</div><div class="contact-card-value">+351 900 000 000</div></div>
+            <div class="contact-card"><div class="contact-card-label">📞 Tiago Bolhão</div><div class="contact-card-value">+351 917 666 344</div></div>
+            <div class="contact-card"><div class="contact-card-label">📞 Inês Almeida</div><div class="contact-card-value">+351 918 363 731</div></div>
           </div>
         </div>
         <div class="rsvp-form-box">
           <div id="rsvpForm">
+            <div class="form-group"><label>Nome(s)</label><input type="text" id="nome" placeholder="Nome(s) de quem vai" required /></div>
+            <div class="form-group"><label>Telemóvel</label><input type="tel" id="email" placeholder="+351 900 000 000" required /></div>
             <div class="form-row">
-              <div class="form-group"><label>Nome</label><input type="text" id="nome" placeholder="O teu nome" required /></div>
-              <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="nome@email.com" required /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label>Vais estar presente?</label><select id="attending"><option>Sim</option><option>Não</option></select></div>
+              <div class="form-group"><label>Confirmo a minha/nossa presença:</label><select id="attending"><option>Sim</option><option>Não</option></select></div>
               <div class="form-group"><label>Número de pessoas</label><select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
             </div>
-            <div class="form-group"><label>Restrições alimentares</label><input type="text" id="dietary" placeholder="Alergias, intolerâncias, opções vegetarianas..." /></div>
+            <div class="form-group"><label>Restrições alimentares</label><input type="text" id="dietary" placeholder="exemplo: nome - restrição" /></div>
             <div class="form-group"><label>Mensagem para os noivos</label><textarea id="message" placeholder="Escreve uma mensagem bonita"></textarea></div>
             <button class="form-submit" onclick="submitForm()">Enviar confirmação</button>
           </div>

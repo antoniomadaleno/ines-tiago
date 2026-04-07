@@ -996,12 +996,12 @@
               <div class="detail-mini">
                 <div class="detail-mini-label">⛪ Cerimónia</div>
                 <div class="detail-mini-value">Igreja da Lavandeira</div>
-                <div class="detail-mini-sub">Copo de água às 11:30 · Missa às 12:00</div>
+                <div class="detail-mini-sub">Receção com comes e bebes</div>
               </div>
               <div class="detail-mini">
                 <div class="detail-mini-label">🍽 Comes e Bebes</div>
                 <div class="detail-mini-value">Quinta do Éden</div>
-                <div class="detail-mini-sub">Jantar e festa</div>
+                <div class="detail-mini-sub">Copo de água</div>
               </div>
             </div>
             <div class="map-block">
@@ -1053,7 +1053,7 @@
             <h2>Playlist colaborativa</h2>
             <p class="section-text">Adiciona as tuas músicas favoritas à playlist do casamento. A festa é de todos!</p>
             <div class="extras-list">
-              <div class="extras-item">Link da playlist em breve</div>
+              <a href="https://open.spotify.com/playlist/6B4aUTURmlZRpk7W2lyyV4?si=1FzgKWWMT6CPyaA4OuBPoA&pt=c3012ee6f803cc70dcb4d909945f56b4&pi=1ifBxDAITuWF6" target="_blank" class="extras-item" style="text-decoration:none;color:inherit;display:block;">🎧 Abrir playlist no Spotify</a>
             </div>
           </div>
         </div>
@@ -1199,13 +1199,41 @@
     function toggleFaq(btn) { btn.parentElement.classList.toggle('open'); }
 
     // ── RSVP
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxw9xxihhQ4rXRrEz5yRpoc96T6T9t9SbLl6NnKwY9JO5xw1xYxnEqsV4IoHFWu3FuH/exec';
+
     function submitForm() {
-      if (!document.getElementById('nome').value.trim() || !document.getElementById('email').value.trim()) {
-        alert('Por favor preenche o nome e email.');
-        return;
-      }
-      document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('formSuccess').classList.add('show');
+      const nome  = document.getElementById('nome').value.trim();
+      const tel   = document.getElementById('email').value.trim();
+      if (!nome || !tel) { alert('Por favor preenche o nome e telemóvel.'); return; }
+
+      const btn = document.querySelector('.form-submit');
+      btn.textContent = 'A enviar...';
+      btn.disabled = true;
+
+      const payload = {
+        nome:      nome,
+        telemovel: tel,
+        attending: document.getElementById('attending').value,
+        guests:    document.getElementById('guests').value,
+        dietary:   document.getElementById('dietary').value.trim(),
+        message:   document.getElementById('message').value.trim()
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        document.getElementById('rsvpForm').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+      })
+      .catch(() => {
+        alert('Ocorreu um erro. Tenta novamente.');
+        btn.textContent = 'Enviar confirmação';
+        btn.disabled = false;
+      });
     }
 
     function resetForm() {
