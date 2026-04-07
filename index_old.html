@@ -1199,13 +1199,41 @@
     function toggleFaq(btn) { btn.parentElement.classList.toggle('open'); }
 
     // ── RSVP
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxw9xxihhQ4rXRrEz5yRpoc96T6T9t9SbLl6NnKwY9JO5xw1xYxnEqsV4IoHFWu3FuH/exec';
+
     function submitForm() {
-      if (!document.getElementById('nome').value.trim() || !document.getElementById('email').value.trim()) {
-        alert('Por favor preenche o nome e email.');
-        return;
-      }
-      document.getElementById('rsvpForm').style.display = 'none';
-      document.getElementById('formSuccess').classList.add('show');
+      const nome  = document.getElementById('nome').value.trim();
+      const tel   = document.getElementById('email').value.trim();
+      if (!nome || !tel) { alert('Por favor preenche o nome e telemóvel.'); return; }
+
+      const btn = document.querySelector('.form-submit');
+      btn.textContent = 'A enviar...';
+      btn.disabled = true;
+
+      const payload = {
+        nome:      nome,
+        telemovel: tel,
+        attending: document.getElementById('attending').value,
+        guests:    document.getElementById('guests').value,
+        dietary:   document.getElementById('dietary').value.trim(),
+        message:   document.getElementById('message').value.trim()
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        document.getElementById('rsvpForm').style.display = 'none';
+        document.getElementById('formSuccess').classList.add('show');
+      })
+      .catch(() => {
+        alert('Ocorreu um erro. Tenta novamente.');
+        btn.textContent = 'Enviar confirmação';
+        btn.disabled = false;
+      });
     }
 
     function resetForm() {

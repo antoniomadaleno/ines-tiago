@@ -1240,6 +1240,9 @@
       document.getElementById('rsvpForm').style.display = 'block';
       document.getElementById('formSuccess').classList.remove('show');
       ['nome','email','dietary','message'].forEach(id => document.getElementById(id).value = '');
+      const btn = document.querySelector('.form-submit');
+      btn.textContent = 'Enviar confirmação';
+      btn.disabled = false;
     }
   </script>
 </body>
