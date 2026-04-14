@@ -516,8 +516,6 @@
       width: 100%;
       aspect-ratio: 4/5;
       border-radius: 1.5rem;
-      background: linear-gradient(rgba(56,44,33,0.18),rgba(56,44,33,0.18)),
-        url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=80') center/cover;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -527,17 +525,30 @@
       overflow: hidden;
     }
 
-    .hero-img::after {
+    .hero-img video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 1.5rem;
+      z-index: 0;
+    }
+
+    .hero-img::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.3));
+      background: rgba(56,44,33,0.18);
+      z-index: 1;
       border-radius: 1.5rem;
     }
 
+    /* overlay handled by ::before */
+
     .save-date-badge {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       border: 1px solid rgba(255,255,255,0.5);
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(4px);
@@ -549,7 +560,7 @@
       width: fit-content;
     }
 
-    .hero-img-bottom { position: relative; z-index: 1; }
+    .hero-img-bottom { position: relative; z-index: 2; }
     .hero-img-location { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.8; margin-bottom: 0.5rem; }
     .hero-img-date { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 400; }
 
@@ -978,6 +989,9 @@
         </div>
         <div class="hero-img-mobile">
           <div class="hero-img">
+            <video autoplay muted loop playsinline>
+              <source src="video/mov1.mp4" type="video/mp4">
+            </video>
             <div class="save-date-badge">Save the date</div>
             <div class="hero-img-bottom">
               <div class="hero-img-location">Lavandeira, Portugal</div>
@@ -989,6 +1003,9 @@
       <div class="hero-right">
         <div class="hero-card-main">
           <div class="hero-img">
+            <video autoplay muted loop playsinline>
+              <source src="video/mov1.mp4" type="video/mp4">
+            </video>
             <div class="save-date-badge">Save the date</div>
             <div class="hero-img-bottom">
               <div class="hero-img-location">Lavandeira, Portugal</div>

@@ -1135,9 +1135,30 @@
             <div class="form-group"><label>Telemóvel</label><input type="tel" id="email" placeholder="+351 900 000 000" required /></div>
             <div class="form-row">
               <div class="form-group"><label>Confirmo a minha/nossa presença:</label><select id="attending"><option>Sim</option><option>Não</option></select></div>
-              <div class="form-group"><label>Número de pessoas</label><select id="guests"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+              <div class="form-group"><label>Número de pessoas</label><input type="number" id="guests" min="1" max="20" value="1" /></div>
             </div>
             <div class="form-group"><label>Restrições alimentares</label><input type="text" id="dietary" placeholder="exemplo: nome - restrição" /></div>
+            <div class="form-group">
+              <label>Levam crianças?</label>
+              <select id="children" onchange="toggleChildren(this.value)">
+                <option value="Não">Não</option>
+                <option value="Sim">Sim</option>
+              </select>
+            </div>
+            <div class="form-group" id="children-details" style="display:none;">
+              <label>Quantas crianças?</label>
+              <select id="childrenCount">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+            </div>
+            <div class="form-group" id="children-list" style="display:none;">
+              <label>Nome(s) e idade(s) das crianças</label>
+              <textarea id="childrenList" placeholder="exemplo:&#10;- Miguel - 4 anos&#10;- Ana - 7 anos" rows="4"></textarea>
+            </div>
             <div class="form-group"><label>Mensagem para os noivos</label><textarea id="message" placeholder="Escreve uma mensagem bonita"></textarea></div>
             <button class="form-submit" onclick="submitForm()">Enviar confirmação</button>
           </div>
@@ -1231,11 +1252,18 @@
     // ── MOBILE MENU
     function toggleMenu() { document.getElementById('mobileNav').classList.toggle('open'); }
 
+    // ── CHILDREN
+    function toggleChildren(val) {
+      const show = val === 'Sim';
+      document.getElementById('children-details').style.display = show ? 'flex' : 'none';
+      document.getElementById('children-list').style.display = show ? 'flex' : 'none';
+    }
+
     // ── FAQ
     function toggleFaq(btn) { btn.parentElement.classList.toggle('open'); }
 
     // ── RSVP
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxw9xxihhQ4rXRrEz5yRpoc96T6T9t9SbLl6NnKwY9JO5xw1xYxnEqsV4IoHFWu3FuH/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHQV0z9IAFSQHzh8Tp7SQ2XoxdQI5ra6tyfJ-oKpzTQjB2t2ueSKpxhHbiuRhK9_Dh/exec';
 
     function submitForm() {
       const nome  = document.getElementById('nome').value.trim();
@@ -1247,12 +1275,15 @@
       btn.disabled = true;
 
       const payload = {
-        nome:      nome,
-        telemovel: tel,
-        attending: document.getElementById('attending').value,
-        guests:    document.getElementById('guests').value,
-        dietary:   document.getElementById('dietary').value.trim(),
-        message:   document.getElementById('message').value.trim()
+        nome:          nome,
+        telemovel:     tel,
+        attending:     document.getElementById('attending').value,
+        guests:        document.getElementById('guests').value,
+        dietary:       document.getElementById('dietary').value.trim(),
+        children:      document.getElementById('children').value,
+        childrenCount: document.getElementById('children').value === 'Sim' ? document.getElementById('childrenCount').value : 0,
+        childrenList:  document.getElementById('children').value === 'Sim' ? document.getElementById('childrenList').value.trim() : '',
+        message:       document.getElementById('message').value.trim()
       };
 
       fetch(SCRIPT_URL, {
@@ -1275,7 +1306,10 @@
     function resetForm() {
       document.getElementById('rsvpForm').style.display = 'block';
       document.getElementById('formSuccess').classList.remove('show');
-      ['nome','email','dietary','message'].forEach(id => document.getElementById(id).value = '');
+      ['nome','email','dietary','message','childrenList'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('children').value = 'Não';
+      document.getElementById('children-details').style.display = 'none';
+      document.getElementById('children-list').style.display = 'none';
       const btn = document.querySelector('.form-submit');
       btn.textContent = 'Enviar confirmação';
       btn.disabled = false;
